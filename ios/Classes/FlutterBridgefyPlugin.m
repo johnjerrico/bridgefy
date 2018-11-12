@@ -43,12 +43,6 @@ FlutterEventSink _eventSink;
         transmitter.delegate = self;
         [transmitter start];
         result(nil);
-    } else if ([@"backgroundModeEnabled" isEqualToString:call.method]){
-        NSLog(@"Method:backgroundModeEnabled");
-        if(call.arguments!=nil){
-            transmitter.backgroundModeEnabled = [call.arguments boolValue];
-        }
-        result(nil);
     } else if ([@"stop" isEqualToString:call.method]){
         NSLog(@"Method:stop");
         [transmitter stop];
@@ -73,37 +67,31 @@ FlutterEventSink _eventSink;
         result(@(transmitter.networkStatus));
     } else if ([@"backgroundModeEnabled" isEqualToString:call.method]){
         NSLog(@"Method:backgroundModeEnabled");
-        if(call.arguments!=nil){
-            transmitter.backgroundModeEnabled = [call.arguments boolValue];
-        }
+        transmitter.backgroundModeEnabled = (BOOL)call.arguments;
         result(nil);
     } else if ([@"isBackgroundModeEnabled" isEqualToString:call.method]){
         NSLog(@"Method:isBackgroundModeEnabled");
         result(@(transmitter.isBackgroundModeEnabled));
     } else if ([@"broadcastReceptionEnabled" isEqualToString:call.method]){
         NSLog(@"Method:broadcastReceptionEnabled");
-        if(call.arguments!=nil){
-            transmitter.broadcastReceptionEnabled = [call.arguments boolValue];
-        }
+        transmitter.broadcastReceptionEnabled = (BOOL)call.arguments;
         result(nil);
     } else if ([@"isBroadcastReceptionEnabled" isEqualToString:call.method]){
         NSLog(@"Method:isBroadcastReceptionEnabled");
         result(@(transmitter.isBroadcastReceptionEnabled));
     } else if ([@"sendDictionary" isEqualToString:call.method]){
         NSLog(@"Method:sendDictionary");
-        if(call.arguments!=nil){
-            BFSendingOption options = (BFSendingOptionDirectTransmission | BFSendingOptionEncrypted);
-            NSError *error;
-            
-            [transmitter sendDictionary:call.arguments[@"dictionary"]
-                                    toUser:call.arguments[@"user"]
-                                    options:options
-                                    error:&error];
-            
-            if (error)
-            {
-                NSLog(@"Error %@", error.localizedDescription);
-            }
+        BFSendingOption options = (BFSendingOptionDirectTransmission | BFSendingOptionEncrypted);
+        NSError *error;
+        
+        [transmitter sendDictionary:call.arguments[@"dictionary"]
+                                toUser:call.arguments[@"user"]
+                                options:options
+                                error:&error];
+        
+        if (error)
+        {
+            NSLog(@"Error %@", error.localizedDescription);
         }
         result(nil);
     } else if ([@"sendData" isEqualToString:call.method]){
@@ -143,15 +131,17 @@ FlutterEventSink _eventSink;
         result(nil);
     } else if ([@"isUserAvailable" isEqualToString:call.method]){
         NSLog(@"Method:isUserAvailable");
-        result(@"[transmitter isUserAvailable:call.arguments]");
+        result(@([transmitter isUserAvailable:call.arguments]));
     } else if ([@"isSecureConnection" isEqualToString:call.method]){
         NSLog(@"Method:isSecureConnection");
-        result(@"[transmitter isSecureConnection:call.arguments]");
+        result(@([transmitter isSecureConnection:call.arguments]));
     } else if ([@"establishSecureConnection" isEqualToString:call.method]){
         NSLog(@"Method:establishSecureConnection");
         NSError *error;
+
         [transmitter establishSecureConnection:call.arguments
                                          error:&error];
+                                         
         if (error)
         {
             NSLog(@"Error %@", error);
@@ -172,13 +162,14 @@ FlutterEventSink _eventSink;
         result(nil);
     } else if ([@"existsKeyForUser" isEqualToString:call.method]){
         NSLog(@"Method:savePublicKey");
-        result(@"[transmitter existsKeyForUser:call.arguments]");
-    } else if ([@"getsecureConnectionExpirationLimit" isEqualToString:call.method]){
-        NSLog(@"Method:getsecureConnectionExpirationLimit");
-        result(@"[transmitter secureConnectionExpirationLimit]");
+        result(@([transmitter existsKeyForUser:call.arguments]));
+    } else if ([@"getSecureConnectionExpirationLimit" isEqualToString:call.method]){
+        NSLog(@"Method:getSecureConnectionExpirationLimit");
+        result(@([transmitter secureConnectionExpirationLimit]));
     } else if ([@"setSecureConnectionExpirationLimit" isEqualToString:call.method]){
         NSLog(@"Method:setSecureConnectionExpirationLimit");
-        result(@"[transmitter secureConnectionExpirationLimit:call.arguments]");
+        [transmitter setSecureConnectionExpirationLimit:(int)call.arguments];
+        result(nil);
     } else {
     result(FlutterMethodNotImplemented);
   }
@@ -205,6 +196,7 @@ didReceiveDictionary:(NSDictionary<NSString *, id> * _Nullable) dictionary
           broadcast:(BOOL)broadcast
                mesh:(BOOL)mesh
 {
+    NSLog(@"Event: Received %@ from %@", dictionary, user);
     // A dictionary was received by BFTransmitter.
     
 }

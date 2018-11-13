@@ -24,39 +24,33 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     String myId;
+    List<dynamic> activePeers;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       await _flutterBridgefy.init('380948ce-a45c-4176-8508-dbff103bbd0a');
       await _flutterBridgefy.start();
       await _flutterBridgefy.backgroundModeEnabled(true);
       myId = await _flutterBridgefy.getCurrentUser();
+      activePeers = await _flutterBridgefy.getActivePeers();
+      print(activePeers);
     } on PlatformException {
       debugPrint('Error');
     }
 
     setState(() {
       _myId = myId;
+      _activePeers = activePeers.toString();
     });
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
   }
 
-  Future<void> _getActivePeers() async {
-    List<dynamic> activePeers;
-
-    activePeers = await _flutterBridgefy.getActivePeers();
-    
-    print(await _flutterBridgefy.isSecureConnection('1c2e5c87-e08e-484f-9398-34552be422d2'));
+  Future<void> _sendDictionary() async {
     await _flutterBridgefy.sendDictionary({
-      'dictionary' : ['MASUK'],
-      'user': '1c2e5c87-e08e-484f-9398-34552be422d2'
+      'dictionary': {'value': 'MASUK'},
+      'user': '4ac9f903-6154-4167-a501-5d1c70704da7'
     });
-    // 1c2e5c87-e08e-484f-9398-34552be422d2
-
-    // setState(() {
-    //   _activePeers = activePeers.toString();
-    // });
   }
 
   @override
@@ -75,7 +69,7 @@ class _MyAppState extends State<MyApp> {
                 ]),
           ),
           floatingActionButton: new FloatingActionButton(
-            onPressed: _getActivePeers,
+            onPressed: _sendDictionary,
             tooltip: 'Increment',
             child: new Icon(Icons.add),
           )),

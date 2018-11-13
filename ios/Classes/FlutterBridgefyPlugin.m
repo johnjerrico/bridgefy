@@ -196,7 +196,7 @@ didReceiveDictionary:(NSDictionary<NSString *, id> * _Nullable) dictionary
           broadcast:(BOOL)broadcast
                mesh:(BOOL)mesh
 {
-    NSLog(@"Event: Received %@ from %@", dictionary, user);
+    NSLog(@"Event: Received %@ from %@", dictionary[@"value"], user);
     // A dictionary was received by BFTransmitter.
     
 }

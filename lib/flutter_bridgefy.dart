@@ -119,4 +119,12 @@ class FlutterBridgefy {
   sendDictionary(value) async {
     return await _methodChannel.invokeMethod('sendDictionary', value);
   }
+
+  sendData(value) async {
+    return await _methodChannel.invokeMethod('sendData', value);
+  }
+
+  sendDictionaryWithData(value) async {
+    return await _methodChannel.invokeMethod('sendDictionaryWithData', value);
+  }
 }

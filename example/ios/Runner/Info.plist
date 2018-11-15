@@ -24,6 +24,12 @@
 	<true/>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>We need bluetooth</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>en</string>
+	<key>NSCameraUsageDescription</key>
+	<string>en</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>en</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>

@@ -99,8 +99,8 @@ FlutterEventSink _eventSink;
         if(call.arguments!=nil){
             BFSendingOption options = (BFSendingOptionDirectTransmission | BFSendingOptionEncrypted);
             NSError *error;
-            
-            [transmitter sendData:call.arguments[@"data"]
+            NSData *data = [[NSData alloc] initWithContentsOfFile:call.arguments[@"data"]];
+            [transmitter sendData:data
                             toUser:call.arguments[@"user"]
                             options:options
                             error:&error];
@@ -196,7 +196,7 @@ didReceiveDictionary:(NSDictionary<NSString *, id> * _Nullable) dictionary
           broadcast:(BOOL)broadcast
                mesh:(BOOL)mesh
 {
-    NSLog(@"Event: Received %@ from %@", dictionary[@"value"], user);
+    NSLog(@"Event: Received %@ and %@ from %@", dictionary[@"value"], data, user);
     // A dictionary was received by BFTransmitter.
     
 }
